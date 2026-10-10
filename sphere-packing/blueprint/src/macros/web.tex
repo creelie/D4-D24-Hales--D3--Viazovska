@@ -1,0 +1,13 @@
+% In this file you should put macros to be used only by
+% the web version. Of course they should have a corresponding
+% version in macros/print.tex.
+% Typically the printed version could have more fancy decorations.
+% This will probably be a very short file.
+
+% plasTeX does not know about `\color` by default; ignore it.
+\newcommand{\color}[1]{}
+
+% Work around a plasTeX issue with `amsmath`'s `\notag`/`\nonumber` when they appear
+% outside the exact environments plasTeX expects.
+\def\notag{}
+\def\nonumber{}

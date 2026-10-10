@@ -1,0 +1,75 @@
+Recall the definition of a Fourier transform.
+
+\begin{definition}\label{def:Fourier-Transform}\lean{Real.fourierIntegral}\leanok
+  The Fourier transform of an $L^1$-function $f:\R^d\to\C$ is defined as
+
+  \[
+    \mathcal{F}(f)(y) = \widehat{f}(y) := \int_{\R^d} f(x)e^{-2\pi i \langle x, y \rangle} \,\mathrm{d}x, \quad y \in \R^d
+  \]
+
+  where $\langle x, y \rangle = \frac12\|x\|^2 + \frac12\|y\|^2 - \frac12\|x - y\|^2$ is the standard scalar product in $\R^d$.
+\end{definition}
+
+The following computational result will be of use later on.
+
+\begin{lemma}\label{lemma:Gaussian-Fourier}\uses{def:Fourier-Transform}\lean{fourier_gaussian_innerProductSpace}\leanok
+  \begin{equation}
+    \mathcal{F}(e^{\pi i \|x\|^2 z})(y) = z^{-4}\,e^{\pi i \|y\|^2 \,(\frac{-1}{z}) }.
+  \end{equation}
+\end{lemma}
+\begin{proof}\leanok
+  This is implemented in Lean via the Gaussian Fourier transform lemma \texttt{fourier\_gaussian\_innerProductSpace}.
+\end{proof}
+
+Of great interest to us will be a specific family of functions, known as Schwartz Functions. The Fourier transform behaves particularly well when acting on Schwartz functions. We elaborate in the following subsections.
+
+\subsection{On Schwartz Functions}
+
+\begin{definition}\label{def:Schwartz-Space}\lean{SchwartzMap}\leanok
+A $C^\infty$~function $f:\R^d\to\C$ is called a \emph{Schwartz function} if it decays to zero as $\|x\|\to\infty$ faster then any inverse power of $\|x\|$, and the same holds for all partial derivatives of $f$, ie, if for all $k, n \in \N$, there exists a constant $C \in \R$ such that for all $x \in \R^d$, $\norm{x}^k \cdot \norm{f^{(n)}(x)} \leq C$, where $f^{(n)}$ denotes the $n$-th derivative of $f$ considered along with the appropriate operator norm. The set of all Schwartz functions from $\R^d$ to $\C$ is called the \emph{Schwartz space}. It is an $\R$-vector space.
+\end{definition}
+
+\begin{lemma}\label{lemma:Fourier-transform-is-automorphism}\lean{SchwartzMap.fourierTransformCLM}\uses{def:Fourier-Transform, def:Schwartz-Space}\leanok
+  The Fourier transform is a continuous, linear automorphism of the space of Schwartz functions.
+\end{lemma}
+\begin{proof}\leanok
+  We do not elaborate here as the result already exists in Mathlib. We do, however, mention that the Lean implementation \emph{defines} a continuous linear equivalence on the Schwartz space \emph{using} the Fourier transform (see \verb|SchwartzMap.fourierTransformCLM|). The `proof' that for any Schwartz function $f$, its Fourier transform and its image under this continuous linear equivalence are, indeed, the same $\R^d \to \R$ function, is stated in Mathlib solely for the purpose of \verb|rw| and \verb|simp| tactics, and is proven simply by \verb|rfl|.
+\end{proof}
+
+% Consider adding an example for expository effect (really not necessary, would be nice if time permits though)
+Another reason we are interested in Schwartz Functions is that they behave well under infinite sums. This will be useful to us when proving the Cohn-Elkies linear programming bound.
+
+\subsection{On the Summability of Schwartz Functions}
+
+We omit the analytic summability lemmas here; in the formalization we use the existing Poisson summation formula for Schwartz functions.
+
+We end with a crucial result on Schwartz functions, the statement of which only makes sense because of the above result.
+% Should probably include something about multiplying a Schwartz function by a negative exponential, either saying that the result is Schwartz (??) or by saying that it is summable. Both would be enough to make the RHS of the sum below converge absolutely.
+\begin{theorem}[Poisson summation formula]\label{thm:Poisson-summation-formula}\uses{def:Fourier-Transform, def:Schwartz-Space, def:dual-lattice}\lean{SchwartzMap.poissonSummation_lattice}\leanok
+  Let $\Lambda$ be a lattice in $\R^d$, and let $f:\R^d\to\R$ be a Schwartz function. Then, for all $v \in \R^d$,
+  \[
+    \sum_{\ell\in\Lambda}f(\ell + v) = \frac{1}{\Vol{\R^d/\Lambda}} \sum_{m\in\Lambda^*}\widehat{f}(m)\, e^{2\pi i \ang{v, m}}.
+  \]
+\end{theorem}
+\begin{proof}\leanok
+\end{proof}
+
+While the Poisson Summation Formula over lattices can be stated in greater generality (and probably should be formalised as such in Mathlib due to the many applications it admits), we stick with Schwartz functions because that should be sufficient for our purposes.
+
+Later, we will use Theorem \ref{thm:Poisson-summation-formula} to prove that the certain functions $a(x)$ and $b(x)$ that will be defined later are eigenfunctions of the Fourier transform.
+To apply the theorem, we need to show that these functions are Schwartz functions. We will do so by verifying the following sufficient condition.
+
+\begin{theorem}\label{thm:smooth-fast-decay-schwartz}\lean{RadialSchwartz.Bridge.schwartzMap_norm_sq_of_contDiff_decay_nonneg}\leanok
+    Assume $f : \R \to \C$ is smooth on $[0, \infty)$ and for all $k, n \in \N$, there exists $C \in \R$ such that
+    $$
+    x^{\frac{k}{2}} \cdot |f^{(n)}(x)| \leq C.
+    $$
+    Then, for all $d \in \N$, the function
+    $$
+    f_d : \R^d \to \C, \quad f_d(x) := f(\|x\|^2)
+    $$
+    is a Schwartz function.
+\end{theorem}
+\begin{proof}\leanok
+This is formalized in Lean as \texttt{RadialSchwartz.Bridge.schwartzMap\_norm\_sq\_of\_contDiff\_decay\_nonneg}.
+\end{proof}
