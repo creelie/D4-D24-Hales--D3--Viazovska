@@ -18,4 +18,4 @@ set_option pp.proofs false
 #print SpherePacking.Dim24.LeechLattice
 #print SpherePacking.Dim24.LeechPacking
 #print SpherePacking.Dim24.IsometricToScaledLeech
-#print PeriodicSpherePacking.Isometric
+#print SpherePacking.Dim24.PeriodicSpherePacking.Isometric

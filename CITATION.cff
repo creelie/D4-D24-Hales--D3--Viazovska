@@ -1,0 +1,74 @@
+cff-version: 1.2.0
+message: "The formal proofs are by Hariharan et al. and Math, Inc. Please cite their work, arXiv:2604.23468, the papers of Viazovska and of Cohn, Kumar, Miller, Radchenko and Viazovska, and this archive."
+title: "Sphere packing in dimensions 8, 24 and 3: an independent check of the formal proofs"
+type: software
+authors:
+  - family-names: Hariharan
+    given-names: Sidharth
+  - family-names: Birkbeck
+    given-names: Christopher
+  - family-names: Lee
+    given-names: Seewoo
+  - family-names: Ma
+    given-names: Ho Kiu Gareth
+  - family-names: Mehta
+    given-names: Bhavik
+  - family-names: Poiroux
+    given-names: Auguste
+  - family-names: Viazovska
+    given-names: Maryna
+  - name: "Math, Inc."
+version: 1.0.0
+date-released: 2026-10-10
+license: Apache-2.0
+repository-code: "https://github.com/creelie/D4-D24-Hales--D3--Viazovska"
+keywords:
+  - sphere packing
+  - E8 lattice
+  - Leech lattice
+  - Lean 4
+  - formal verification
+abstract: >-
+  The Lean 4 and Mathlib proofs of sphere packing optimality in dimensions 8 and 24, with
+  uniqueness of the Leech packing among periodic packings (math-inc/Sphere-Packing-Lean at
+  1e98fb4), copied unchanged, with an independent check added by Deep Bhattacharjee: a static
+  scan, a statement audit, a CI build with the axioms and a kernel replay, and Python, Julia, C
+  and C++ checks of the E8 and Leech lattices. The state of the Kepler conjecture in proof
+  assistants is recorded in kepler/STATUS.md.
+references:
+  - type: article
+    title: "Progress in Formalizing Sphere Packing in Dimension 8"
+    authors:
+      - family-names: Hariharan
+        given-names: Sidharth
+      - name: "et al."
+    year: 2026
+    identifiers:
+      - type: other
+        value: "arXiv:2604.23468"
+  - type: article
+    title: "The sphere packing problem in dimension 8"
+    authors:
+      - family-names: Viazovska
+        given-names: Maryna
+    journal: "Annals of Mathematics"
+    volume: 185
+    year: 2017
+    doi: 10.4007/annals.2017.185.3.7
+  - type: article
+    title: "The sphere packing problem in dimension 24"
+    authors:
+      - family-names: Cohn
+        given-names: Henry
+      - family-names: Kumar
+        given-names: Abhinav
+      - family-names: Miller
+        given-names: Stephen D.
+      - family-names: Radchenko
+        given-names: Danylo
+      - family-names: Viazovska
+        given-names: Maryna
+    journal: "Annals of Mathematics"
+    volume: 185
+    year: 2017
+    doi: 10.4007/annals.2017.185.3.8

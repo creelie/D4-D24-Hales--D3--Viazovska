@@ -1,0 +1,72 @@
+{
+  "title": "Sphere packing in dimensions 8, 24 and 3: an independent check of the formal proofs",
+  "version": "1.0.0",
+  "upload_type": "software",
+  "creators": [
+    {"name": "Hariharan, Sidharth"},
+    {"name": "Birkbeck, Christopher"},
+    {"name": "Lee, Seewoo"},
+    {"name": "Ma, Ho Kiu Gareth"},
+    {"name": "Mehta, Bhavik"},
+    {"name": "Poiroux, Auguste"},
+    {"name": "Viazovska, Maryna"},
+    {"name": "Math, Inc."}
+  ],
+  "contributors": [
+    {
+      "name": "Bhattacharjee, Deep",
+      "orcid": "0000-0003-0466-750X",
+      "affiliation": "Formerly, Electro-Gravitational Space Propulsion Laboratory (EGSPL), Bhubaneswar, Odisha 751030, India",
+      "type": "DataCurator"
+    }
+  ],
+  "description": "<p>The Lean 4 and Mathlib proofs that E₈ gives the densest sphere packing in dimension 8 (density π⁴/384, Viazovska) and the Leech lattice the densest in dimension 24 (density π¹²/12!, Cohn, Kumar, Miller, Radchenko and Viazovska), with the uniqueness of the Leech packing among periodic packings. The Lean development is copied unchanged from math-inc/Sphere-Packing-Lean at commit 1e98fb4 (Apache-2.0). It was begun at EPFL by Sidharth Hariharan and Maryna Viazovska with Birkbeck, Lee, Ma, Mehta and Poiroux (arXiv:2604.23468) and completed in dimensions 8 and 24 by Math, Inc.'s autoformalization agent Gauss; they are the creators of this record.</p><p>The archive adds an independent check: a static scan of all 180,649 lines finding no sorry, axiom, native_decide or other kernel bypass; an audit of the definitions behind the headline statements, which concern the supremum of the upper density over all packings, not only lattice or periodic ones; a CI build with #print axioms of every headline theorem and a leanchecker replay of all 829 SpherePacking modules; and Python, Julia, C and C++ checks that the lattices in the Lean source are E₈ and the Leech lattice (even unimodular, 240 and 0 roots, 2160 and 196560 vectors of norm 4, the two densities). It also records that no complete Lean proof of the Kepler conjecture exists; Flyspeck, in HOL Light and Isabelle, is the only complete formal proof in dimension 3.</p>",
+  "keywords": [
+    "sphere packing",
+    "E8 lattice",
+    "Leech lattice",
+    "Kepler conjecture",
+    "Lean 4",
+    "Mathlib",
+    "formal verification"
+  ],
+  "license": "Apache-2.0",
+  "language": "eng",
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/math-inc/Sphere-Packing-Lean",
+      "relation": "isDerivedFrom",
+      "resource_type": "software"
+    },
+    {
+      "identifier": "https://github.com/thefundamentaltheor3m/Sphere-Packing-Lean",
+      "relation": "isDerivedFrom",
+      "resource_type": "software"
+    },
+    {
+      "identifier": "arXiv:2604.23468",
+      "relation": "isSupplementTo",
+      "resource_type": "publication-preprint",
+      "scheme": "arxiv"
+    },
+    {
+      "identifier": "10.4007/annals.2017.185.3.7",
+      "relation": "references",
+      "resource_type": "publication-article",
+      "scheme": "doi"
+    },
+    {
+      "identifier": "10.4007/annals.2017.185.3.8",
+      "relation": "references",
+      "resource_type": "publication-article",
+      "scheme": "doi"
+    },
+    {
+      "identifier": "10.1017/fmp.2017.1",
+      "relation": "references",
+      "resource_type": "publication-article",
+      "scheme": "doi"
+    }
+  ],
+  "notes": "The formal proofs are the work of the creators listed (math-inc/Sphere-Packing-Lean, Apache-2.0, sphere-packing/LICENSE). The checks in verification/, VERIFICATION.md and kepler/STATUS.md were added by Deep Bhattacharjee (d.bhattacharjee@erl-forschung.de; itsdeep@live.com) under the MIT licence in LICENSE."
+}
