@@ -13,7 +13,8 @@ Done in CI (`.github/workflows/lean.yml`, job "Lean build, axioms and kernel rep
 - `verification/Statements.lean` (the restated theorems below) and the upstream `check_axioms.lean`,
   with `#print axioms` on every headline theorem; `verification/check_axioms_log.py` fails the job if any
   axiom other than `propext`, `Classical.choice`, `Quot.sound` appears;
-- `leanchecker` (shipped with Lean from v4.28.0) on every one of the 829 `SpherePacking.*` modules,
+- `leanchecker` (shipped with Lean from v4.28.0) on every one of the 828 modules under `SpherePacking/`
+  (the root file `SpherePacking.lean` only imports them),
   which replays each module's declarations through the kernel again and catches environment hacking.
 
 The results of the CI run are recorded at the end of this file.
@@ -89,8 +90,7 @@ statements are the right numbers.
 
 ## 4. Findings
 
-No mistake has been found so far, in the formal statements or in the checks above. The final verdict
-waits for the CI build and the kernel replay.
+No mistake was found, in the formal statements, in the build or in the checks above.
 
 Two corrections to the source papers were found by the upstream project during formalization, not here:
 - a sign error in Proposition 7 of Viazovska's dimension-8 paper, and the corrected expression for the
@@ -101,4 +101,19 @@ They are recorded in `sphere-packing/README.md`. Both are fixed in the formal pr
 
 ## 5. CI results
 
-(to be filled in from the CI run of this branch)
+Run 38093757203 of `.github/workflows/lean.yml` on commit `bf86a35` (pull request #3), 10 October 2026,
+23:04–23:48 UTC. Both jobs passed.
+
+| Step | Result |
+|---|---|
+| `lake build` | "Build completed successfully (4561 jobs)", no `sorry` warning |
+| `#print axioms`, `verification/Statements.lean` | 7 theorems, each depending only on `propext`, `Classical.choice`, `Quot.sound` |
+| `#print axioms`, upstream `check_axioms.lean` | `SpherePacking.Dim8.MainTheorem` and `SpherePacking.Dim24.MainTheorem`, the same three axioms |
+| `verification/Definitions.lean` | prints the definitions of section 3, as read there |
+| `leanchecker` kernel replay | 828 of 828 modules `ok`, none failed |
+| `verification/run_all.sh` | scan clean (829 Lean files, 180,649 lines); `data/` matches the source; Python and Julia lattice checks pass; E₈: 240 roots and 2160 vectors of norm 4 (C and C++); Leech: no vector of norm 2 and 196560 of norm 4 (C++) |
+
+The seven theorems of `Statements.lean` are `sphere_packing_dim8`, `sphere_packing_dim24`,
+`leech_unique_among_periodic`, `SpherePacking.Dim8.MainTheorem`, `SpherePacking.Dim24.MainTheorem`,
+`E8Packing_density` and `SpherePacking.Dim24.LeechPacking_density`. The logs are kept as the artifacts
+`lean-logs` and `check-logs` of that run.
