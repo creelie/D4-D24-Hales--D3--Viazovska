@@ -1,0 +1,95 @@
+name: lean
+
+# Builds the Lean development in sphere-packing/ (math-inc/Sphere-Packing-Lean at 1e98fb4,
+# Lean v4.28.0, Mathlib v4.28.0), prints the axioms of the headline theorems, and replays every
+# SpherePacking module through the Lean kernel again with leanchecker.  The fast checks of
+# verification/run_all.sh run in a separate job.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    name: Static scan and lattice checks (Python, Julia, C, C++, shell)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: julia-actions/setup-julia@v2
+        with:
+          version: "1.10"
+      - run: verification/run_all.sh
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: check-logs
+          path: build/*.txt
+
+  lean:
+    name: Lean build, axioms and kernel replay
+    runs-on: ubuntu-latest
+    timeout-minutes: 355
+    steps:
+      - name: Free disk space
+        uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
+        with:
+          tool-cache: false
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: false
+          docker-images: true
+          swap-storage: false
+      - uses: actions/checkout@v4
+      - name: Install elan
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh \
+            | sh -s -- -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+      - name: Restore the build of SpherePacking
+        uses: actions/cache@v4
+        with:
+          path: sphere-packing/.lake/build
+          key: sp-build-${{ hashFiles('sphere-packing/lake-manifest.json', 'sphere-packing/lean-toolchain', 'sphere-packing/**/*.lean') }}
+          restore-keys: sp-build-
+      - name: Get the Mathlib cache
+        working-directory: sphere-packing
+        run: lake exe cache get
+      - name: Build (lake build)
+        working-directory: sphere-packing
+        run: |
+          mkdir -p ../logs
+          lake build 2>&1 | tee ../logs/build.txt
+          test "${PIPESTATUS[0]}" -eq 0
+          ! grep -q "declaration uses 'sorry'" ../logs/build.txt
+      - name: Headline statements and their axioms
+        working-directory: sphere-packing
+        run: |
+          lake env lean ../verification/Statements.lean 2>&1 | tee ../logs/statements.txt
+          python3 -I ../verification/check_axioms_log.py ../logs/statements.txt 7
+          lake env lean check_axioms.lean 2>&1 | tee ../logs/upstream-axioms.txt
+          python3 -I ../verification/check_axioms_log.py ../logs/upstream-axioms.txt 2
+          lake env lean ../verification/Definitions.lean 2>&1 | tee ../logs/definitions.txt
+      - name: Kernel replay of every SpherePacking module (leanchecker)
+        working-directory: sphere-packing
+        run: |
+          lake env leanchecker --help > /dev/null 2>&1 || echo "leanchecker --help returned nonzero (ignored)"
+          find SpherePacking -name '*.lean' | sed 's/\.lean$//; s#/#.#g' | sort > ../logs/modules.txt
+          echo "$(wc -l < ../logs/modules.txt) modules"
+          : > ../logs/leanchecker.txt
+          xargs -P 4 -I{} sh -c 'if lake env leanchecker {} > /tmp/lc.$$.txt 2>&1; then echo "ok {}"; else echo "FAIL {}"; cat /tmp/lc.$$.txt; fi' \
+            < ../logs/modules.txt >> ../logs/leanchecker.txt
+          grep -c '^ok ' ../logs/leanchecker.txt
+          ! grep -q '^FAIL ' ../logs/leanchecker.txt
+          test "$(grep -c '^ok ' ../logs/leanchecker.txt)" -eq "$(wc -l < ../logs/modules.txt)"
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lean-logs
+          path: logs/
