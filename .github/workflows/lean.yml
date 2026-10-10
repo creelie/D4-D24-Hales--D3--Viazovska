@@ -88,11 +88,12 @@ jobs:
       - name: Kernel replay of every SpherePacking module (leanchecker)
         working-directory: sphere-packing
         run: |
-          lake env leanchecker --help > /dev/null 2>&1 || echo "leanchecker --help returned nonzero (ignored)"
           find SpherePacking -name '*.lean' | sed 's/\.lean$//; s#/#.#g' | sort > ../logs/modules.txt
           echo "$(wc -l < ../logs/modules.txt) modules"
           : > ../logs/leanchecker.txt
-          # Two at a time: with four at once the runner shut down partway through the replay.
+          # leanchecker has no --help flag: called with one it starts a replay of everything
+          # imported, Mathlib included, which exhausted the runner's memory. Each call below
+          # checks one module against its compiled imports.
           xargs -P 2 -I{} sh -c 'if lake env leanchecker {} > /tmp/lc.$$.txt 2>&1; then echo "ok {}"; else echo "FAIL {}"; cat /tmp/lc.$$.txt; fi' \
             < ../logs/modules.txt | tee -a ../logs/leanchecker.txt
           grep -c '^ok ' ../logs/leanchecker.txt
