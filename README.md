@@ -44,6 +44,13 @@ Here `SpherePackingConstant d` is the supremum, over all packings of congruent b
 density (the `limsup` as R → ∞ of the fraction of the ball of radius R about the origin that the balls
 cover). `VERIFICATION.md` goes through each definition.
 
+## Archive
+
+Release v1.0.0 is archived on Zenodo as
+[10.5281/zenodo.23289869](https://doi.org/10.5281/zenodo.23289869); every version is under
+[10.5281/zenodo.23289868](https://doi.org/10.5281/zenodo.23289868). The creators are the authors of the
+formal proofs; Deep Bhattacharjee is listed as data curator.
+
 ## Licenses
 
 `sphere-packing/` keeps its Apache-2.0 license (`sphere-packing/LICENSE`). The files added in this
