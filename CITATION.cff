@@ -19,7 +19,15 @@ authors:
     given-names: Maryna
   - name: "Math, Inc."
 version: 1.0.0
-date-released: 2026-10-10
+date-released: 2026-10-11
+doi: 10.5281/zenodo.23289869
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.23289869
+    description: "Version 1.0.0"
+  - type: doi
+    value: 10.5281/zenodo.23289868
+    description: "All versions"
 license: Apache-2.0
 repository-code: "https://github.com/creelie/D4-D24-Hales--D3--Viazovska"
 keywords:
